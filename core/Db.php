@@ -1,6 +1,6 @@
 <?php
 
-namespace blog;
+namespace blog\core;
 
 use PDO;
 use PDOException;
@@ -11,9 +11,10 @@ class Db
     private static $dbname = 'glob-blog';
     private static $username = 'phplay';
     private static $password = 'zx';
+    private static $instance;
 
 
-    public function connect()
+    public static function connect()
     {
         try {
             $pdo = new PDO("mysql:host=" . self::$host . ";dbname=" . self::$dbname . ";charset = utf8", self::$username, self::$password);
@@ -22,7 +23,13 @@ class Db
         } catch(PDOException $e){
             echo "Connection failed".$e->getMessage();
         }
-
+    }
+    public static function getConnection()
+    {
+        if(self::$instance == null){
+            self::$instance = self::connect();
+        }
+        return self::$instance;
     }
     /*public static function query($query,$params = array())
     {
