@@ -15,20 +15,22 @@ class Article
 
     public function __construct()
     {
-        if(isset($_REQUEST['create-article'])) {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->title = $_POST['title'];
             $this->content = $_POST['content'];
             $this->user_id = $_SESSION['userId'];
         }
     }
 
-    public function getAllArticles(){
+    public function getAllArticles()
+    {
         $db = Db::getConnection();
         $stmt = $db->prepare('SELECT * FROM article');
         $stmt->execute();
         $data = $stmt->fetchAll();
         return $data;
     }
+
     public function articleByUserId($userId)
     {
         $db = Db::getConnection();
@@ -47,23 +49,7 @@ class Article
         $data = $stmt->fetch();
         return $data;
     }
-    public function  updateArticle($id,$title,$content,$category_id,$user_id)
-    {
-        $db = Db::getConnection();
-        $stmt = $db->prepare(
-            'UPDATE article
-              SET title = :title,
-                content = :content,
-                category_id = :category_id,
-                user_id = :user_id
-              WHERE id = :id');
-        $stmt->bindParam(':id',$id);
-        $stmt->bindParam(':title',$title);
-        $stmt->bindParam(':content',$content);
-        $stmt->bindParam(':category_id',$category_id);
-        $stmt->bindParam(':user_id',$user_id);
-        $stmt->execute();
-    }
+
     public function deleteArticle($id)
     {
         $db = Db::getConnection();

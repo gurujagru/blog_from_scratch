@@ -35,10 +35,8 @@ class ArticleController extends BaseController
         $category = new Category();
         if(isset($_REQUEST['create-article'])){
             $category = $category->getCategoryByTitle($_POST['category']);
-            $categoryId = $category['id'];
-            //$article->saveNewArticle($_POST['title'],$_POST['content'],$categoryId,$_SESSION['userId']);
-            $article->category_id = $categoryId;
-            $article->insert();
+            $article->category_id = $category['id'];
+            $article->save();
             //echo '<script>alert("Uspesno ste kreirali clanak!")</script>';
             header('Location:/article/my-articles');
             die();
@@ -57,8 +55,9 @@ class ArticleController extends BaseController
         $category = new Category();
         if(isset($_REQUEST['edit-article'])){
             $category = $category->getCategoryByTitle($_POST['category']);
-            $categoryId = $category['id'];
-            $article->updateArticle($id,$_POST['title'],$_POST['content'],$categoryId,$_SESSION['userId']);
+            $article->category_id = $category['id'];
+            $article->id = $id;
+            $article->update();
             //echo '<script>alert("Uspesno ste izmenili clanak!")</script>';
             header('Location:/article/my-articles');
             die();
