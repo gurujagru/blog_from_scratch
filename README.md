@@ -1,10 +1,10 @@
-# blog_from_scratch
+# <h1>blog_from_scratch</h1> <br/>
 
-Techniques used:
-•	MVC,
-•	Routing,
-•	Inheritence,
-•	Autoloding,
-•	Traits,
-•	Singleton pattern,
-•	Operating with database.
+Techniques used: <br/>
+â€¢	MVC <br/>
+â€¢	Routing <br/>
+â€¢	Inheritence <br/>
+â€¢	Autoloding <br/>
+â€¢	Traits <br/>
+â€¢	Singleton pattern <br/>
+â€¢	Operating with database <br/>
