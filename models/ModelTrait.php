@@ -13,7 +13,7 @@ trait ModelTrait
             $this->insert();
         }
     }
-    public function insert()
+    protected function insert()
     {
         $db = Db::getConnection();
         $properties = get_object_vars($this);
@@ -34,7 +34,7 @@ trait ModelTrait
         return true;
     }
 
-    public function update()
+    protected function update()
     {
         $db = Db::getConnection();
         $properties = get_object_vars($this);
@@ -48,6 +48,20 @@ trait ModelTrait
             $stmt->bindValue(":{$property}",$value);
         }
         $stmt->bindValue(':id',$this->id);
-        return $stmt->execute();
+        $stmt->execute();
+    }
+
+    public static function delete(array $attributes)
+    {
+        $db = Db::getConnection();
+        $data = [];
+        foreach ($attributes as $attribute=>$value) {
+            $data [] = ":{$attribute} = $attribute";
+        }
+        $stmt = $db->prepare('DELETE FROM ' . self::table() . ' WHERE ' . implode('AND ',$data));
+        foreach ($attributes as $attribute=>$value) {
+            $stmt->bindValue(":{$attribute}",$value);
+        }
+        $stmt->execute();
     }
 }

@@ -28,6 +28,7 @@ class ArticleController extends BaseController
         $article = new Article();
         $articles = $article->articleByUserId($_SESSION['userId']);
         $this->setData('myArticles',$articles);
+        return $articles;
 
     }
     public function create(){
@@ -57,7 +58,7 @@ class ArticleController extends BaseController
             $category = $category->getCategoryByTitle($_POST['category']);
             $article->category_id = $category['id'];
             $article->id = $id;
-            $article->update();
+            $article->save();
             //echo '<script>alert("Uspesno ste izmenili clanak!")</script>';
             header('Location:/article/my-articles');
             die();
@@ -74,7 +75,7 @@ class ArticleController extends BaseController
     public function delete($id)
     {
         $article = new Article();
-        $article->deleteArticle($id);
+        $article->delete(['id'=>$id]);
             //echo '<script>alert("Uspesno ste izmenili clanak!")</script>';
             header('Location:/article/my-articles');
             die();
