@@ -34,10 +34,12 @@
 
 function rekurzija($x)
 {
-    echo "<ul class='dropdown-menu'>";
-    foreach ($x as $k=>$v) {
-        echo "<li class='dropdown-submenu'>".$v['Parent'].'</li>';
-        rekurzija($v['Children']);
+    echo '<ul class="dropdown-menu">';
+    foreach ($x as $k=>$v){
+        echo '<li class="dropdown-submenu">'.$v['Parent'].'</li>';
+        if($v['Children'] != null) {
+            rekurzija($v['Children']);
+        }
     }
     echo '</ul>';
 }
@@ -45,11 +47,8 @@ rekurzija($data['potkategorije'])
 ?>
 
 <div class="container">
-    <h2>Multi-Level Dropdowns</h2>
-    <p>In this example, we have created a .dropdown-submenu class for multi-level dropdowns (see style section above).</p>
-    <p>Note that we have added jQuery to open the multi-level dropdown on click (see script section below).</p>
     <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Tutorials
+        <button id="qwer" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Kategorije
             <span class="caret"></span></button>
         <?php rekurzija($data['potkategorije'])?>
     </div>
@@ -57,13 +56,12 @@ rekurzija($data['potkategorije'])
 
 
 <script>
-    $(document).ready(function(){
-        $('.dropdown-submenu').on("click", function(e){
+    $('.dropdown-submenu').click(
+        function(e){
             $(this).next('ul').toggle();
             e.stopPropagation();
             e.preventDefault();
         });
-    });
 </script>
 
     </body>
