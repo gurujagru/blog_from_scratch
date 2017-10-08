@@ -24,6 +24,9 @@
     <textarea placeholder="content" name="content" rows="3" cols="22"><?=isset($data['articleEdit']['content'])?$data['articleEdit']['content']:null?></textarea> <br/>
     <label>Kategorija</label>
     <select name="category">
+        <?php foreach ($data['categories'] as $k=>$v):?>
+        <option><?= $v['title']?></option>
+        <?php endforeach?>
        <?php rekurzija($data['potkategorije'])?>
     </select><br/><br/>
     <input type="submit" name="<?=!isset($data['articleEdit'])?'create-article':'edit-article'?>" value="Sacuvaj"

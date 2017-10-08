@@ -5,6 +5,23 @@ use blog\core\Db;
 
 class Article
 {
+    public $id;
+    public $title;
+    public $content;
+    public $category_id;
+    public $user_id;
+
+    use ModelTrait;
+
+    public function __construct()
+    {
+        if(isset($_REQUEST['create-article'])) {
+            $this->title = $_POST['title'];
+            $this->content = $_POST['content'];
+            $this->user_id = $_SESSION['userId'];
+        }
+    }
+
     public function getAllArticles(){
         $db = Db::getConnection();
         $stmt = $db->prepare('SELECT * FROM article');
@@ -29,16 +46,6 @@ class Article
         $stmt->execute();
         $data = $stmt->fetch();
         return $data;
-    }
-    public function saveNewArticle($title,$content,$category_id,$user_id)
-    {
-        $db = Db::getConnection();
-        $stmt = $db->prepare('INSERT INTO article (title,content,category_id,user_id) VALUES (:title,:content,:category_id,:user_id)');
-        $stmt->bindParam(':title',$title);
-        $stmt->bindParam(':content',$content);
-        $stmt->bindParam(':category_id',$category_id);
-        $stmt->bindParam(':user_id',$user_id);
-        $stmt->execute();
     }
     public function  updateArticle($id,$title,$content,$category_id,$user_id)
     {
@@ -79,5 +86,8 @@ class Article
             );
         }
         return $result;
+    }
+    public static function table(){
+        return 'article';
     }
 }

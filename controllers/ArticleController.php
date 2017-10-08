@@ -36,7 +36,9 @@ class ArticleController extends BaseController
         if(isset($_REQUEST['create-article'])){
             $category = $category->getCategoryByTitle($_POST['category']);
             $categoryId = $category['id'];
-            $article->saveNewArticle($_POST['title'],$_POST['content'],$categoryId,$_SESSION['userId']);
+            //$article->saveNewArticle($_POST['title'],$_POST['content'],$categoryId,$_SESSION['userId']);
+            $article->category_id = $categoryId;
+            $article->insert();
             //echo '<script>alert("Uspesno ste kreirali clanak!")</script>';
             header('Location:/article/my-articles');
             die();
