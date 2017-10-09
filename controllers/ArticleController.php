@@ -21,6 +21,8 @@ class ArticleController extends BaseController
         if($singleArticle == false){
             die('404 not found');
         }
+        $userHasArticle = $article->userHasArticle($id);
+        $this->setData('userHasArticle',$userHasArticle);
         $this->setData('singleArticle',$singleArticle);
     }
     public function myArticles()
@@ -63,14 +65,20 @@ class ArticleController extends BaseController
             header('Location:/article/my-articles');
             die();
         }
-        $articleEdit = $article->getArticleById($id);
-        $categories = $category->getAllCategory();
-        $this->setData('categories',$categories);
-        $this->setData('articleEdit',$articleEdit);
+        if($_SESSION['username'] == $article->userHasArticle($id)) {
+            $articleEdit = $article->getArticleById($id);
+            $categories = $category->getAllCategory();
+            $this->setData('categories', $categories);
+            $this->setData('articleEdit', $articleEdit);
 
-        $newArticle = new Article();
-        $newArticle = $newArticle->subs(18);
-        $this->setData('potkategorije',$newArticle);
+            $newArticle = new Article();
+            $newArticle = $newArticle->subs(18);
+            $this->setData('potkategorije', $newArticle);
+        } else {
+            $_SESSION['errorUpdate'] = 'Ne moze to tako!';
+            header ('Location:/');
+            die();
+        }
     }
     public function delete($id)
     {

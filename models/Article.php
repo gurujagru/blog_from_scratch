@@ -73,7 +73,19 @@ class Article
         }
         return $result;
     }
+
+    public function userHasArticle($articleId)
+    {
+        $db = Db::getConnection();
+        $stmt = $db->prepare('SELECT u.username FROM user u JOIN article a ON a.user_id = u.id WHERE a.id = :articleId');
+        $stmt->bindValue(':articleId',$articleId);
+        $stmt->execute();
+        $data = $stmt->fetchColumn();
+        return $data;
+    }
+
     public static function table(){
         return 'article';
     }
+
 }

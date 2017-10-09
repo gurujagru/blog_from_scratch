@@ -5,6 +5,17 @@ use blog\core\Db;
 
 class User
 {
+    private $username;
+    private $password;
+
+    use ModelTrait;
+
+    public function __construct()
+    {
+        $this->username = $_POST['username'];
+        $this->password = md5($_POST['password']);
+    }
+
     public function getUserByUsername($username){
         $db = Db::getConnection();
         $stmt = $db->prepare('SELECT * FROM user WHERE username =:username');
@@ -13,12 +24,9 @@ class User
         $data =  $stmt->fetch();
         return $data;
     }
-    public function registerNewUser($username, $password)
+
+    public static function table()
     {
-        $db = Db::getConnection();
-        $stmt = $db->prepare('INSERT INTO user(username,password) VALUES(:username,:password)');
-        $stmt->bindParam(':username',$username);
-        $stmt->bindParam(':password',$password);
-        $stmt->execute();
+        return 'user';
     }
 }

@@ -2,7 +2,14 @@
 if(!isset($_SESSION)){
     header('Location:/');
 }
+echo isset($_SESSION['errorUpdate'])?'<h1 id="flash">' . $_SESSION['errorUpdate'] . '</h1>':null;
+unset($_SESSION['errorUpdate']);
 ?>
+<style>
+    #flash {
+        color: red;
+    }
+</style>
 <html>
     <head>
     </head>

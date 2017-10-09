@@ -32,13 +32,13 @@ class UserController extends BaseController
     public static function signup(){
         if(isset($_POST['signup'])) {
             $username = $_POST['username'];
-            $password = md5($_POST['password']);
+            //$password = md5($_POST['password']);
             $user = new User();
             $user->getUserByUsername($username);
             if ($user->getUserByUsername($username)) {
                 echo "Korisnicko ime vec postoji";
             } else {
-                $user->registerNewUser($username, $password);
+                $user->save();
                 self::login();
             }
         }
