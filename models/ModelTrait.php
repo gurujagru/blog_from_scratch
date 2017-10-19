@@ -4,7 +4,6 @@ use blog\core\Db;
 
 trait ModelTrait
 {
-
     public function save()
     {
         if(isset($this->id)){

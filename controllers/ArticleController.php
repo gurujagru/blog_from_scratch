@@ -4,6 +4,7 @@ namespace blog\controllers;
 
 use blog\models\Article;
 use blog\models\Category;
+use blog\models\Comment;
 
 class ArticleController extends BaseController
 {
@@ -24,6 +25,10 @@ class ArticleController extends BaseController
         $userHasArticle = $article->userHasArticle($id);
         $this->setData('userHasArticle',$userHasArticle);
         $this->setData('singleArticle',$singleArticle);
+
+        $comment = new Comment();
+        $comment = $comment->getAllCommentsArticle($id);
+        $this->setData('comments',$comment);
     }
     public function myArticles()
     {
@@ -44,11 +49,11 @@ class ArticleController extends BaseController
             header('Location:/article/my-articles');
             die();
         } else {
-            $categories = $category->getAllCategory();
-            $this->setData('categories',$categories);
+            //$categories = $category->getAllCategory();
+            //$this->setData('categories',$categories);
 
             $newArticle = new Article();
-            $newArticle = $newArticle->subs(18);
+            $newArticle = $newArticle->subs();
             $this->setData('potkategorije',$newArticle);
         }
     }
@@ -57,7 +62,9 @@ class ArticleController extends BaseController
         $article = new Article();
         $category = new Category();
         if(isset($_REQUEST['edit-article'])){
-            $category = $category->getCategoryByTitle($_POST['category']);
+            $categiryTitle = explode('/', $_POST['category']);
+            $categiryTitle = $categiryTitle[max(array_keys($categiryTitle))];
+            $category = $category->getCategoryByTitle($categiryTitle);
             $article->category_id = $category['id'];
             $article->id = $id;
             $article->save();
@@ -67,13 +74,13 @@ class ArticleController extends BaseController
         }
         if($_SESSION['username'] == $article->userHasArticle($id)) {
             $articleEdit = $article->getArticleById($id);
-            $categories = $category->getAllCategory();
-            $this->setData('categories', $categories);
+            //$categories = $category->getAllCategory();
+            //$this->setData('categories', $categories);
             $this->setData('articleEdit', $articleEdit);
 
             $newArticle = new Article();
-            $newArticle = $newArticle->subs(18);
-            $this->setData('potkategorije', $newArticle);
+            $newArticle = $newArticle->subs();
+            $this->setData('potkategorije',$newArticle);
         } else {
             $_SESSION['errorUpdate'] = 'Ne moze to tako!';
             header ('Location:/');

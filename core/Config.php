@@ -16,7 +16,7 @@ class Config
 
     private function __construct()
     {
-        $this->data = require('routes.php');
+        $this->data = require_once('routes.php');
     }
     public static function getInstance()
     {

@@ -57,11 +57,15 @@ class Article
         $stmt->bindParam(':id', $id);
         $stmt->execute();
     }
-    public function subs($id)
+    public function subs($id = ' IS NULL')
     {
         $db = Db::getConnection();
-        $stmt = $db->prepare('SELECT * FROM subcategories WHERE category_id = :id');
-        $stmt->bindParam(':id', $id);
+        if ($id === ' IS NULL'){
+            $stmt = $db->prepare('SELECT * FROM category WHERE category_id' . $id);
+        } else {
+            $stmt = $db->prepare('SELECT * FROM category WHERE category_id = :id');
+            $stmt->bindParam(':id', $id);
+        }
         $stmt->execute();
         $data = $stmt->fetchAll();
         $result = [];
