@@ -3,18 +3,24 @@ include_once('views/layout/layout.php');
 
 ?>
 <h1><?=$data['singleArticle']['title']?></h1>
-<p><?=$data['singleArticle']['content']?></p>
+<form>
+    <textarea id="noviKomentar"><?=$data['singleArticle']['content']?></textarea>
 <h2>Komentari</h2>
+    <textarea placeholder="Napisite komentar"></textarea><br/><br/>
+    <button type="submit" name="sacuvaj-komentar">Sacuvaj</button>
+    <button type="submit" name="sacuvaj-komentar">Otkazi</button>
+</form>
+
 <?php 
 function rekurzija($x){
 	echo '<ul>';
 	foreach ($x as $key => $value) {
-		echo '<li><p>' . $value['username'] . ' ' . date_format(date_create($value['created_at']),"H:i:s d/m/Y") . '</p>
+		echo '<li><p>' . $value['username'] . ' ' . date_format(date_create($value['created_at']),'H:i:s d/m/Y') . '</p>
 			    <textarea readonly>' . $value['Parent'] . '</textarea><br/><br/>
-                    <form>
-                        <input id="uFormi" name="comment_id" value="' . $value['comment_id'] . '" hidden/>
-                        <textarea class="skriveno" name="komentar"></textarea><br/><br/>
-                        <button class="skriveno" type="submit">Sacuvaj</button>
+                    <form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
+                        <input name="commentId" value="' . $value['commentId'] . '" hidden/>
+                        <textarea class="skriveno" name="contentComment"></textarea><br/><br/>
+                        <button type="submit">Sacuvaj</button>
                     </form>
                     <button type="button" class="odgovoriNaKomentar">Odgovori</button>&nbsp;';
 		if (!empty($value['Children'])){
@@ -23,7 +29,7 @@ function rekurzija($x){
 		}
 		echo '</li>';
 	}
-	echo '</ul>';	
+	echo '</ul>';
 }
 rekurzija($data['comments']);
 ?>
@@ -31,6 +37,10 @@ rekurzija($data['comments']);
 	ul,li {
 		list-style-type: none;
 	}
+    #noviKomentar {
+        width: 350px;
+        height: 150px;
+    }
 </style>
 <?php
 if(isset($_SESSION['username']) && ($_SESSION['username']) == $data['userHasArticle']): ?>
@@ -65,6 +75,6 @@ if(isset($_SESSION['username']) && ($_SESSION['username']) == $data['userHasArti
         }
     });
 
-    $("form").hide();
+    $("form:not(:first)").hide();
 
 </script>

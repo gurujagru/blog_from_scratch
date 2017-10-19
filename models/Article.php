@@ -15,11 +15,11 @@ class Article
 
     public function __construct()
     {
-        if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->title = $_POST['title'];
-            $this->content = $_POST['content'];
-            $this->user_id = $_SESSION['userId'];
-        }
+        //if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->title = isset($_POST['title'])?$_POST['title']:null;
+            $this->content = isset($_POST['content'])?$_POST['content']:null;
+            $this->user_id = isset($_SESSION['userId'])?$_SESSION['userId']:null;
+        //}
     }
 
     public function getAllArticles()

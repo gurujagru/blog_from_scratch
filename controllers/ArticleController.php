@@ -17,6 +17,17 @@ class ArticleController extends BaseController
     }
     public function view($id)
     {
+        $comment = new Comment();
+        if(isset($_REQUEST['sacuvaj-komentar'])) {
+            if (isset($_SESSION['userId'])) {
+                $comment->article_id = $id;
+                $comment->comment_id = $_POST['commentId'];
+                $comment->save();
+            } else {
+                header('location:/login');
+                exit();
+            }
+        }
         $article = new Article();
         $singleArticle = $article->getArticleById($id);
         if($singleArticle == false){
@@ -29,6 +40,7 @@ class ArticleController extends BaseController
         $comment = new Comment();
         $comment = $comment->getAllCommentsArticle($id);
         $this->setData('comments',$comment);
+
     }
     public function myArticles()
     {
