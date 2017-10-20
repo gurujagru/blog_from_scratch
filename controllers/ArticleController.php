@@ -21,7 +21,7 @@ class ArticleController extends BaseController
         if(isset($_REQUEST['sacuvaj-komentar'])) {
             if (isset($_SESSION['userId'])) {
                 $comment->article_id = $id;
-                $comment->comment_id = $_POST['commentId'];
+                $comment->comment_id = isset($_POST['commentId'])?$_POST['commentId']:null;
                 $comment->save();
             } else {
                 header('location:/login');

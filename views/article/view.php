@@ -3,12 +3,12 @@ include_once('views/layout/layout.php');
 
 ?>
 <h1><?=$data['singleArticle']['title']?></h1>
-<form>
-    <textarea id="noviKomentar"><?=$data['singleArticle']['content']?></textarea>
+<textarea id="clanak"><?=$data['singleArticle']['content']?></textarea>
+<form action="<?=$_SERVER['REQUEST_URI']?>" method="post">
 <h2>Komentari</h2>
-    <textarea placeholder="Napisite komentar"></textarea><br/><br/>
-    <button type="submit" name="sacuvaj-komentar">Sacuvaj</button>
-    <button type="submit" name="sacuvaj-komentar">Otkazi</button>
+    <textarea id="noviKomentar" name="contentComment" placeholder="Napisite komentar"></textarea><br/><br/>
+    <button type="submit" class="skriveniDugmici" name="sacuvaj-komentar">Sacuvaj</button>
+    <button id="otkaziKomentar" type="button" class="skriveniDugmici">Otkazi</button>
 </form>
 
 <?php 
@@ -20,7 +20,7 @@ function rekurzija($x){
                     <form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
                         <input name="commentId" value="' . $value['commentId'] . '" hidden/>
                         <textarea class="skriveno" name="contentComment"></textarea><br/><br/>
-                        <button type="submit">Sacuvaj</button>
+                        <button type="submit" name="sacuvaj-komentar">Sacuvaj</button>
                     </form>
                     <button type="button" class="odgovoriNaKomentar">Odgovori</button>&nbsp;';
 		if (!empty($value['Children'])){
@@ -37,9 +37,12 @@ rekurzija($data['comments']);
 	ul,li {
 		list-style-type: none;
 	}
-    #noviKomentar {
+    #clanak {
         width: 350px;
         height: 150px;
+    }
+    .skriveniDugmici {
+        display: none;
     }
 </style>
 <?php
@@ -76,5 +79,18 @@ if(isset($_SESSION['username']) && ($_SESSION['username']) == $data['userHasArti
     });
 
     $("form:not(:first)").hide();
+
+    $("#noviKomentar").on("keyup",function(){
+       $(".skriveniDugmici").show();
+        if ($("#noviKomentar").val() === ""){
+            $(".skriveniDugmici").hide();
+        }
+    });
+
+    $("#otkaziKomentar").click(function(){
+       $(".skriveniDugmici").hide();
+        $("#noviKomentar").val("");
+    });
+
 
 </script>
