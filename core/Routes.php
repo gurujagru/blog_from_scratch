@@ -45,5 +45,10 @@ return
         'Pattern' => '|^/*$|',
         'Controller' => 'Article',
         'Method' => 'index'
+        ],
+        [
+        'Pattern' => '|^article/deleteComment/([0-9]+)?$|',
+        'Controller' => 'Article',
+        'Method' => 'deleteComment'
         ]
     ];

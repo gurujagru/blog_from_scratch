@@ -10,16 +10,16 @@ class Article
     public $content;
     public $category_id;
     public $user_id;
+    //public $comments = [];
 
     use ModelTrait;
 
-    public function __construct()
+    public function __construct($title = null,$content = null,$category_id = null,$user_id = null)
     {
-        //if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->title = isset($_POST['title'])?$_POST['title']:null;
-            $this->content = isset($_POST['content'])?$_POST['content']:null;
-            $this->user_id = isset($_SESSION['userId'])?$_SESSION['userId']:null;
-        //}
+        $this->title = $title;
+        $this->content = $content;
+        $this->category_id = $category_id;
+        $this->user_id = $user_id;
     }
 
     public function getAllArticles()
@@ -48,14 +48,6 @@ class Article
         $stmt->execute();
         $data = $stmt->fetch();
         return $data;
-    }
-
-    public function deleteArticle($id)
-    {
-        $db = Db::getConnection();
-        $stmt = $db->prepare('DELETE FROM article WHERE id = :id');
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
     }
     public function subs($id = ' IS NULL')
     {

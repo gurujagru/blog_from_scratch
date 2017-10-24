@@ -1,5 +1,5 @@
 <?php
-include_once('views/layout/layout.php');
+include_once('views/layout/before_content.php');
 if (!isset($_SESSION['username'])) {
     header('Location:/login');
 }
@@ -9,4 +9,7 @@ if (!isset($_SESSION['username'])) {
 
 <h1>Novi clanak</h1>
 <?php include_once ('_form.php')?>
+<?php
+include_once('views/layout/after_content.php');
+?>
 

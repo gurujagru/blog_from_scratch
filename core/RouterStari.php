@@ -1,7 +1,7 @@
 <?php
 
 $request = substr($_SERVER['REQUEST_URI'],1);
-$routes = require_once 'routes.php';
+$routes = require_once 'Routes.php';
 $arguments = [];
 $foundRoute = null;
 foreach($routes as $route){

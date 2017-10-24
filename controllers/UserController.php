@@ -3,6 +3,7 @@
 namespace blog\controllers;
 
 use blog\models\User;
+use blog\core\Session;
 
 class UserController extends BaseController
 {
@@ -14,20 +15,21 @@ class UserController extends BaseController
             $user = new User();
             $user = $user->getUserByUsername($username);
             if (!empty($user) && $password == $user['password']) {
-                $_SESSION['username'] = $username;
-                $_SESSION['userId'] = $user['id'];
+                Session::setSession('username',$username);
+                Session::setSession('userId',$user['id']);
                 header('Location:/');
             }
         }
     }
     public static function logout()
     {
-        if (isset($_SESSION['username'])){
+        if (isset($_SESSION['userId'])){
             session_destroy();
         } else {
-            echo "Morate biti ulogovani!";
+            Session::setFlashMessage('login');
         }
-        self::renderView('user/login');
+        header('Location:/');
+        exit;
     }
     public static function signup(){
         if(isset($_POST['signup'])) {

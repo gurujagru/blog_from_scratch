@@ -10,14 +10,16 @@ class Comment
 	public $user_id;
 	public $article_id;
 	public $comment_id;
+	public $created_at;
 
 	use ModelTrait;
 
-	public function __construct()
+	public function __construct($content = null, $user_id = null, $article_id = null, $comment_id = null)
 	{
-		$this->content = isset($_POST['contentComment'])?$_POST['contentComment']:null;
-		$this->user_id = isset($_SESSION['userId'])?$_SESSION['userId']:null;
-		$this->comment_id = isset($_POST['commentId'])?$_POST['commentId']:null;
+		$this->content = $content;
+		$this->user_id = $user_id;
+		$this->article_id = $article_id;
+		$this->comment_id = $comment_id;
 	}
 	public function getAllCommentsArticle($articleId, $commentId = ' IS NULL')
 	{
@@ -42,6 +44,15 @@ class Comment
 				);
 		}
 		return $result;
+	}
+	public function getCommentByArticle($articleId)
+	{
+		$db = Db::getConnection();
+		$stmt = $db->prepare("SELECT content FROM comment c JOIN article a ON c.article_id = a.id WHERE c.article_id = :articleId");
+		$stmt->bindValue(':articleId',$articleId);
+		$stmt->execute();
+		$data = $stmt->fetchAll();
+		return $data;
 	}
 	public static function table(){
 		return 'comment';

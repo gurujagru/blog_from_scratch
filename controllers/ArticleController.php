@@ -5,6 +5,8 @@ namespace blog\controllers;
 use blog\models\Article;
 use blog\models\Category;
 use blog\models\Comment;
+use blog\core\Post;
+use blog\core\Session;
 
 class ArticleController extends BaseController
 {
@@ -19,14 +21,18 @@ class ArticleController extends BaseController
     {
         $comment = new Comment();
         if(isset($_REQUEST['sacuvaj-komentar'])) {
-            if (isset($_SESSION['userId'])) {
-                $comment->article_id = $id;
-                $comment->comment_id = isset($_POST['commentId'])?$_POST['commentId']:null;
-                $comment->save();
-            } else {
-                header('location:/login');
-                exit();
-            }
+
+            //TODO provera $_POST['Coment']['attr']
+
+            Session::userLogged();
+            $comment->user_id = Session::getSession('userId');
+            $comment->article_id = $id;
+            $comment->content = Post::post('comment','contentComment');
+            $commentByArticle = $comment->getAllCommentsArticle($id,Post::post('comment','commentId'));
+            $comment->comment_id = Post::post('comment','commentId');
+            $comment->save();
+            header('location:/article/view/' . $id);
+            exit();
         }
         $article = new Article();
         $singleArticle = $article->getArticleById($id);
@@ -40,7 +46,6 @@ class ArticleController extends BaseController
         $comment = new Comment();
         $comment = $comment->getAllCommentsArticle($id);
         $this->setData('comments',$comment);
-
     }
     public function myArticles()
     {
@@ -54,16 +59,19 @@ class ArticleController extends BaseController
         $article = new Article();
         $category = new Category();
         if(isset($_REQUEST['create-article'])){
-            $category = $category->getCategoryByTitle($_POST['category']);
+            Session::userLogged();
+            $article->user_id = Session::getSession('userId');
+            $categiryTitle = explode('/', Post::post('article','category'));
+            $categiryTitle = $categiryTitle[max(array_keys($categiryTitle))];
+            $category = $category->getCategoryByTitle($categiryTitle);
             $article->category_id = $category['id'];
+            $article->content = Post::post('article','content');
+            $article->title = Post::post('article','title');
             $article->save();
             //echo '<script>alert("Uspesno ste kreirali clanak!")</script>';
             header('Location:/article/my-articles');
             die();
         } else {
-            //$categories = $category->getAllCategory();
-            //$this->setData('categories',$categories);
-
             $newArticle = new Article();
             $newArticle = $newArticle->subs();
             $this->setData('potkategorije',$newArticle);
@@ -74,11 +82,15 @@ class ArticleController extends BaseController
         $article = new Article();
         $category = new Category();
         if(isset($_REQUEST['edit-article'])){
+            Session::userLogged();
+            $article->user_id = Session::getSession('userId');
             $categiryTitle = explode('/', $_POST['category']);
             $categiryTitle = $categiryTitle[max(array_keys($categiryTitle))];
             $category = $category->getCategoryByTitle($categiryTitle);
             $article->category_id = $category['id'];
             $article->id = $id;
+            $article->content = Post::post('article','content');
+            $article->title = Post::post('article','title');
             $article->save();
             //echo '<script>alert("Uspesno ste izmenili clanak!")</script>';
             header('Location:/article/my-articles');
@@ -104,7 +116,19 @@ class ArticleController extends BaseController
         $article->delete(['id'=>$id]);
             //echo '<script>alert("Uspesno ste izmenili clanak!")</script>';
             header('Location:/article/my-articles');
-            die();
+        die();
+    }
+    public function saveComment($id)
+    {
+        $comment = new Comment();
+        $comment->save();
+        die();
+    }
+    public function deleteComment($id)
+    {
+        $comment = new Comment();
+        $comment->delete(['id'=>$id]);
+        die();
     }
 
 }

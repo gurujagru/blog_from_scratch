@@ -1,7 +1,8 @@
 <?php
-if (isset($_SESSION['username'])){
-    header('Location:/');
-}
+use blog\core\Session;
+
+Session::getFlashMessage();
+
 ?>
 <title>Login</title>
 <h1>Login</h1>
