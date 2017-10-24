@@ -77,16 +77,16 @@ $(document).ready(function(){
             $.ajax({
                 url:'/article/deleteComment/' + commentId,
                 type:'post',
-                data:{id:commentId},
-                success:function(){
-                    //location.reload(); // reloading page
-                    var buttonSakrijOdgovore = $(thisElement).parent('li').parent('ul').prev();
-                    var roditeljUl = buttonSakrijOdgovore.next();
-                    $(thisElement).parent().remove();
-                    if (roditeljUl.children('li').length == 0){
-                        buttonSakrijOdgovore.remove();
-                    }
+                data:{id:commentId}
+            }).done(function(rsp){
+                var buttonSakrijOdgovore = $(thisElement).parent('li').parent('ul').prev();
+                var roditeljUl = buttonSakrijOdgovore.next();
+                $(thisElement).parent().remove();
+                if (roditeljUl.children('li').length == 0){
+                    buttonSakrijOdgovore.remove();
                 }
+            }).fail(function(err,responseText,XHRobj){
+
             });
         }
     });

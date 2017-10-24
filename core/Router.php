@@ -29,7 +29,7 @@ class Router
     public static function getController()
     {
         $foundRoute = self::getUri();
-        $controllerPath = 'controllers/'. $foundRoute['foundRoute']['Controller'] . 'Controller.php';
+        $controllerPath = '../controllers/'. $foundRoute['foundRoute']['Controller'] . 'Controller.php';
         if(!file_exists($controllerPath)){
             die('Controller not found!');
         }
@@ -50,6 +50,6 @@ class Router
             die('This controller does not have the requested method');
         }
         $data = $objekat->getData();
-        require 'views/' . lcfirst($foundRoute['foundRoute']['Controller']) . '/' . $foundRoute['foundRoute']['Method'] . '.php';
+        require '../views/' . lcfirst($foundRoute['foundRoute']['Controller']) . '/' . $foundRoute['foundRoute']['Method'] . '.php';
     }
 }

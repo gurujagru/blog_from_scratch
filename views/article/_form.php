@@ -21,3 +21,6 @@
     <input type="submit" name="<?=!isset($data['articleEdit'])?'create-article':'edit-article'?>" value="Sacuvaj"
            onclick="return confirm('Potvrdite vas zahtev!')"/>
 </form>
+<?php
+include_once('../views/layout/after_content.php');
+?>

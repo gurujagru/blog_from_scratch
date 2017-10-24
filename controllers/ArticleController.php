@@ -98,7 +98,6 @@ class ArticleController extends BaseController
         }
         if($_SESSION['username'] == $article->userHasArticle($id)) {
             $articleEdit = $article->getArticleById($id);
-            //$this->setData('categories', $categories);
             $this->setData('articleEdit', $articleEdit);
 
             $newArticle = new Article();
