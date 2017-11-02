@@ -12,6 +12,7 @@ trait ModelTrait
             $this->insert();
         }
     }
+
     protected function insert()
     {
         $db = Db::getConnection();
@@ -62,5 +63,15 @@ trait ModelTrait
             $stmt->bindValue(":{$attribute}",$value);
         }
         $stmt->execute();
+    }
+
+    public function setAttributes(array $attributes)
+    {
+        foreach ($attributes as $attribute => $value) {
+            if(property_exists($this, $attribute)){
+                $this->{$attribute} = $value;
+            }
+        }
+        return $this;
     }
 }

@@ -13,9 +13,9 @@ if(isset($_SESSION['username']) && ($_SESSION['username']) == $data['userHasArti
 <?php endif?>
 <form action="<?=$_SERVER['REQUEST_URI']?>" method="post">
     <h3>Komentari</h3>
-    <textarea id="noviKomentar" name="contentComment" placeholder="Napišite komentar"></textarea><br/><br/>
-    <button id="sacuvaj" type="submit" class="skriveniDugmici" name="sacuvaj-komentar">Sačuvaj</button>
-    <button id="otkaziKomentar" type="button" class="skriveniDugmici">Otkaži</button>
+    <textarea id="noviKomentar" name="comment[content]" placeholder="Napišite komentar"></textarea><br/><br/>
+    <button type="submit" id="sacuvaj" name="sacuvaj-komentar" class="skriveniDugmici btn btn-default" >Sačuvaj</button>
+    <button id="otkaziKomentar" type="button" class="skriveniDugmici btn btn-default">Otkaži</button>
 </form>
 
 <?php
@@ -28,19 +28,22 @@ function rekurzija($x){
 	foreach ($x as $key => $value) {
         $dateTime = date_format(date_create($value['created_at']),'H:i:s d/m/Y');
 		echo "<li><br/<br/><p><b>{$value['username']} </b>$dateTime</p>
-			    <p readonly>{$value['Parent']}</p>
-                    <form class=\"formeKomentara\" action=\"{$_SERVER['REQUEST_URI']}\" method=\"post\">
-                        <input id=\"commentId\" name=\"commentId\" value=\"{$value['commentId']}\" hidden/>
-                        <textarea class=\"skriveno\" name=\"contentComment\"></textarea><br/><br/>
-                        <button class=\"sacuvaj btn btn-default\" type=\"submit\" name=\"sacuvaj-komentar\">Sačuvaj</button>
-                    </form>
-                    <a href=\"#\" type=\"button\" class=\"odgovoriNaKomentar\"><b>Odgovori | </b></a>";
-        $loginUsername = isset($_SESSION['username']) ? $_SESSION['username'] : null;
-        if ($value['username'] == $loginUsername) {
-            echo "<a href=\"#\" class=\"submit\"><b>Obriši | </b></a>";
-        }
+			 <p readonly>{$value['Parent']}</p>
+             <form class=\"formeKomentara\" action=\"{$_SERVER['REQUEST_URI']}\" method=\"post\">
+                 <input id=\"commentId\" name=\"comment[comment_id]\" value=\"{$value['commentId']}\" hidden/>
+                 <textarea class=\"skriveno\" name=\"comment[content]\"></textarea><br/><br/>
+                 <button class=\"sacuvaj btn btn-default\" type=\"submit\" name=\"sacuvaj-komentar\">Sačuvaj</button>
+                 <button class=\"otkazi btn btn-default\" type=\"button\">Otkaži</button>
+             </form>";
+        $loginUsername = isset($_SESSION['username']) ? $_SESSION['username'] : null;?>
+        <a href="#" class="odgovoriNaKomentar"><b><?= ($value['username'] == $loginUsername) || (!empty($value['Children'])) ? "Odgovori | " : "Odgovori" ?></b></a>
+        <?php
+        if ($value['username'] == $loginUsername):?>
+            <a href="#" class="obrisiKomentar"><b><?= empty($value['Children']) ? "Obriši" : "Obriši | " ?></b></a>
+        <?php endif ?>
+        <?php
 		if (!empty($value['Children'])){
-			echo '<a href="#" class="odgovori"><b>Prikaži odgovore</b><span class="caret"</span></a>';
+            echo "<a href=\"#\" class=\"odgovori\"><b>Prikaži odgovore</b><span class=\"caret\"</span></a>";
 			rekurzija($value['Children']);
 		}
 		echo '</li>';

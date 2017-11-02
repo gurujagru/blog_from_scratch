@@ -1,13 +1,11 @@
 <?php
-
 namespace blog\controllers;
-
 
 abstract class BaseController{
     private $podaci = [];
     final function setData($name,$value)
     {
-        if(preg_match('/^[a-zA-Z]+[a-z_]*$/',$name)){
+        if (preg_match('/^[a-zA-Z]+[a-z_]*$/',$name)){
             $this->podaci[$name] = $value;
         }
     }

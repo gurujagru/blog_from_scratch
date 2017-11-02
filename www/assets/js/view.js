@@ -16,26 +16,26 @@ $(document).ready(function(){
 
     $(".container").find("ul:not(:first)").hide();
 
-    //button Odgovori/Otkazi
+    //button Odgovori
 
-    $(".odgovoriNaKomentar").click(function () {
+    $(".odgovoriNaKomentar").click(function() {
         event.preventDefault();
-        if ($(this).text() == "Odgovori | ") {
-            $(this).next().hide();
-            var prev = $(this).prev();
-            $(this).appendTo(prev);
-            prev.show();
-            $(this).html("<button class='btn btn-default'>Otkazi</button>");
-        } else {
-            var parent = $(this).parent();
-            parent.hide();
-            $(this).insertAfter(parent);
-            $(this).next().show();
-            $(this).html("<b>Odgovori | </b>");
-        }
+        $(this).hide();
+        $(this).nextAll('.obrisiKomentar:first').hide();
+        $(this).nextAll('.odgovori:first').hide();
+        $(this).prevAll('form:first').show();
     });
 
 
+    //button Otkazi
+
+    $(".otkazi").click(function(){
+        var $parent = $(this).parent();
+        $parent.hide();
+        $parent.nextAll('.odgovoriNaKomentar:first').show();
+        $parent.nextAll('.obrisiKomentar:first').show();
+        $parent.nextAll('.odgovori:first').show();
+    });
 
     $("#noviKomentar").click(function () {
         event.preventDefault();
@@ -68,20 +68,20 @@ $(document).ready(function(){
 
     //ajax brisanje komentara
 
-    $(".submit").click(function(){
+    $(".obrisiKomentar").click(function(){
         event.preventDefault();
         var result = confirm("Zelite li da obrisete komentar?");
         if (result) {
-            var thisElement = this;
+            var $thisElement = $(this);
             var commentId = $(this).prev().prev().children([0]).val();
             $.ajax({
                 url:'/article/deleteComment/' + commentId,
                 type:'post',
                 data:{id:commentId}
             }).done(function(rsp){
-                var buttonSakrijOdgovore = $(thisElement).parent('li').parent('ul').prev();
+                var buttonSakrijOdgovore = $thisElement.parent('li').parent('ul').prev();
                 var roditeljUl = buttonSakrijOdgovore.next();
-                $(thisElement).parent().remove();
+                $thisElement.parent().remove();
                 if (roditeljUl.children('li').length == 0){
                     buttonSakrijOdgovore.remove();
                 }
@@ -89,5 +89,26 @@ $(document).ready(function(){
 
             });
         }
+    });
+    function popUp(selector, view){
+        $(selector).click(function(){
+            event.preventDefault();
+            $(".pop-up").show();
+            $("#ajaxLogin").load(view);
+        });
+        $(document).on("click","#zatvori",function(){
+            $(".pop-up").hide();
+        })
+    }
+    popUp("#login","/login");
+    popUp("#sign-up","/signup");
+
+    //validation
+
+    $(document).on("submit",function(){
+       if($(".form").val() == "" || !isNaN($(".form").val())){
+           event.preventDefault();
+           alert("Ne sme biti praznih polja!");
+       }
     });
 });

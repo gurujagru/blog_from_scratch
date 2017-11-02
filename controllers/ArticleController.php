@@ -1,12 +1,12 @@
 <?php
-
 namespace blog\controllers;
 
+use blog\core\exceptions\CustomException;
 use blog\models\Article;
 use blog\models\Category;
 use blog\models\Comment;
-use blog\core\Post;
 use blog\core\Session;
+use Exception;
 
 class ArticleController extends BaseController
 {
@@ -19,24 +19,34 @@ class ArticleController extends BaseController
     }
     public function view($id)
     {
-        $comment = new Comment();
-        if(isset($_REQUEST['sacuvaj-komentar'])) {
-
-            //TODO provera $_POST['Coment']['attr']
-
+        if (isset($_REQUEST['sacuvaj-komentar'])) {
+            $comment = new Comment($_POST['comment']);
+            $commentId = $comment->getCommentByArticle($id);
+            if (!empty($commentId) && isset($_POST['comment']['comment_id'])){
+                try {
+                    foreach ($commentId as $key => $value) {
+                        if ($_POST['comment']['comment_id'] == $value['id']){
+                            $valueExists = $value['id'];
+                        }
+                    }
+                    if (!isset($valueExists)){
+                        throw new CustomException('Pogrešan unos! Pokušajte ponovo!');
+                    }
+                } catch(Exception $e) {
+                    echo $e->getMessage();
+                    exit;
+                }
+            }
             Session::userLogged();
             $comment->user_id = Session::getSession('userId');
             $comment->article_id = $id;
-            $comment->content = Post::post('comment','contentComment');
-            $commentByArticle = $comment->getAllCommentsArticle($id,Post::post('comment','commentId'));
-            $comment->comment_id = Post::post('comment','commentId');
             $comment->save();
             header('location:/article/view/' . $id);
             exit();
         }
         $article = new Article();
         $singleArticle = $article->getArticleById($id);
-        if($singleArticle == false){
+        if ($singleArticle == false){
             die('404 not found');
         }
         $userHasArticle = $article->userHasArticle($id);
@@ -56,19 +66,16 @@ class ArticleController extends BaseController
 
     }
     public function create(){
-        $article = new Article();
-        $category = new Category();
-        if(isset($_REQUEST['create-article'])){
+        if (isset($_REQUEST['create-article'])){
+            $article = new Article($_POST['article']);
+            $category = new Category();
             Session::userLogged();
             $article->user_id = Session::getSession('userId');
-            $categiryTitle = explode('/', Post::post('article','category'));
+            $categiryTitle = explode('/', $_POST['category']);
             $categiryTitle = $categiryTitle[max(array_keys($categiryTitle))];
             $category = $category->getCategoryByTitle($categiryTitle);
             $article->category_id = $category['id'];
-            $article->content = Post::post('article','content');
-            $article->title = Post::post('article','title');
             $article->save();
-            //echo '<script>alert("Uspesno ste kreirali clanak!")</script>';
             header('Location:/article/my-articles');
             die();
         } else {
@@ -79,9 +86,9 @@ class ArticleController extends BaseController
     }
     public function edit($id)
     {
-        $article = new Article();
-        $category = new Category();
-        if(isset($_REQUEST['edit-article'])){
+        if (isset($_REQUEST['edit-article'])){
+            $article = new Article($_POST['article']);
+            $category = new Category();
             Session::userLogged();
             $article->user_id = Session::getSession('userId');
             $categiryTitle = explode('/', $_POST['category']);
@@ -89,14 +96,12 @@ class ArticleController extends BaseController
             $category = $category->getCategoryByTitle($categiryTitle);
             $article->category_id = $category['id'];
             $article->id = $id;
-            $article->content = Post::post('article','content');
-            $article->title = Post::post('article','title');
             $article->save();
-            //echo '<script>alert("Uspesno ste izmenili clanak!")</script>';
             header('Location:/article/my-articles');
             die();
         }
-        if($_SESSION['username'] == $article->userHasArticle($id)) {
+        $article = new Article();
+        if ($_SESSION['username'] == $article->userHasArticle($id)) {
             $articleEdit = $article->getArticleById($id);
             $this->setData('articleEdit', $articleEdit);
 
@@ -113,14 +118,7 @@ class ArticleController extends BaseController
     {
         $article = new Article();
         $article->delete(['id'=>$id]);
-            //echo '<script>alert("Uspesno ste izmenili clanak!")</script>';
-            header('Location:/article/my-articles');
-        die();
-    }
-    public function saveComment($id)
-    {
-        $comment = new Comment();
-        $comment->save();
+        header('Location:/article/my-articles');
         die();
     }
     public function deleteComment($id)
@@ -129,5 +127,4 @@ class ArticleController extends BaseController
         $comment->delete(['id'=>$id]);
         die();
     }
-
 }

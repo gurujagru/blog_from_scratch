@@ -12,8 +12,8 @@
 </head>
 <body>
 <?php
-use blog\core\Session;
 
+use blog\core\Session;
 ?>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -21,16 +21,19 @@ use blog\core\Session;
             <a class="navbar-brand" href="http://glob-blog.org">GLOB-BLOG</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="http://glob-blog.org">Home</a></li>
+            <li><a href="http://glob-blog.org">Početna</a></li>
             <?php if (Session::getSession('userId') == null): ?>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/signup">Signup</a></li>
+                <li><a href="/login" id="login">Prijava</a></li>
+                <li><a href="/signup" id="sign-up">Registracija</a></li>
             <?php else: ?>
-                <li><a href="/article/my-articles">Moji clanci</a></li>
+                <li><a href="/article/my-articles">Moji članci</a></li>
                 <li><a href="/logout">Logout <?= ucfirst(Session::getSession('username')) ?></a></li>
             <?php endif ?>
         </ul>
     </div>
 </nav>
 <div class="container">
+    <div class="pop-up">
+        <div class="pop-up-content" id="ajaxLogin"></div>
+    </div>
 

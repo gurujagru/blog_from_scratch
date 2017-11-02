@@ -1,6 +1,6 @@
 <form action="<?=!isset($data['articleEdit'])?'/article/create':'/article/edit/'.$data['articleEdit']['id']?>" method="post">
-    <input type="text" name="title" placeholder="title" value="<?=isset($data['articleEdit']['title'])?$data['articleEdit']['title']:null?>"/> <br/><br/>
-    <textarea placeholder="content" name="content" rows="3" cols="22"><?=isset($data['articleEdit']['content'])?$data['articleEdit']['content']:null?></textarea> <br/>
+    <input type="text" name="article[title]" value="<?=isset($data['articleEdit']['title'])?$data['articleEdit']['title']:null?>" placeholder="title"/> <br/><br/>
+    <textarea name="article[content]" placeholder="content" rows="3" cols="22"><?=isset($data['articleEdit']['content'])?$data['articleEdit']['content']:null?></textarea> <br/>
     <label>Kategorija</label>
     <?php 
     function rekurzija($x,$y = [])

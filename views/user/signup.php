@@ -3,10 +3,10 @@ if (isset($_SESSION['username'])){
     header('Location:/');
 }
 ?>
-<title>Signup</title>
-<h1>Sign up</h1>
+<h1>Registracija</h1>
 <form action="/signup" method="post">
-    <input type="text" placeholder="username" name="username">
-    <input type="password" placeholder="password" name="password">
-    <input type="submit" name="signup" value="signup">
+    <input type="text" class="form" placeholder="username" name="username"><br/><br/>
+    <input type="password" class="form" name="password" placeholder="password" ><br/><br/>
+    <input type="submit" class="btn btn-primary" name="signup" value="Registruj se">
+    <button type="button" id="zatvori" class="btn btn-default">Zatvori</button>
 </form>

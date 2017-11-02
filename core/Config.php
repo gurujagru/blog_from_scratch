@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: PC
- * Date: 08-Oct-17
- * Time: 11:26 AM
- */
-
 namespace blog\core;
-
 
 class Config
 {

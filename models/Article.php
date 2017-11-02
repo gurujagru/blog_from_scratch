@@ -10,16 +10,12 @@ class Article
     public $content;
     public $category_id;
     public $user_id;
-    //public $comments = [];
 
     use ModelTrait;
 
-    public function __construct($title = null,$content = null,$category_id = null,$user_id = null)
+    public function __construct($attributes = [])
     {
-        $this->title = $title;
-        $this->content = $content;
-        $this->category_id = $category_id;
-        $this->user_id = $user_id;
+        $this->setAttributes($attributes);
     }
 
     public function getAllArticles()
@@ -83,5 +79,4 @@ class Article
     public static function table(){
         return 'article';
     }
-
 }

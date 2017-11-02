@@ -1,17 +1,20 @@
 <?php
-
 namespace blog\controllers;
 
 use blog\models\User;
 use blog\core\Session;
+use blog\core\Purifier;
 
 class UserController extends BaseController
 {
     public static function login()
     {
         if (isset($_REQUEST['login']) || isset($_REQUEST['signup'])) {
-            $username = $_POST['username'];
-            $password = md5($_POST['password']);
+            $username = Purifier::run($_POST['username']);
+            if ($username == ""){
+
+            }
+            $password = md5(Purifier::run($_POST['password']));
             $user = new User();
             $user = $user->getUserByUsername($username);
             if (!empty($user) && $password == $user['password']) {
@@ -32,7 +35,7 @@ class UserController extends BaseController
         exit;
     }
     public static function signup(){
-        if(isset($_POST['signup'])) {
+        if (isset($_POST['signup'])) {
             $username = $_POST['username'];
             //$password = md5($_POST['password']);
             $user = new User();

@@ -5,8 +5,8 @@ if (!isset($_SESSION['username'])) {
 }
 ?>
 <br/>
-<a href="/article/my-articles">Moji clanci</a>
+<a href="/article/my-articles">Moji članci</a>
 
-<h1>Novi clanak</h1>
+<h1>Novi članak</h1>
 <?php include_once ('_form.php')?>
 

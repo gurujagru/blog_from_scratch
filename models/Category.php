@@ -1,5 +1,6 @@
 <?php
 namespace blog\models;
+
 use blog\core\Db;
 
 class Category

@@ -30,7 +30,7 @@ class Router
     {
         $foundRoute = self::getUri();
         $controllerPath = '../controllers/'. $foundRoute['foundRoute']['Controller'] . 'Controller.php';
-        if(!file_exists($controllerPath)){
+        if (!file_exists($controllerPath)){
             die('Controller not found!');
         }
         require_once $controllerPath;
@@ -43,7 +43,7 @@ class Router
     {
         $foundRoute = self::getUri();
         $objekat = self::getController();
-        if(method_exists($objekat,$foundRoute['foundRoute']['Method'])){
+        if (method_exists($objekat,$foundRoute['foundRoute']['Method'])){
             $methodName = $foundRoute['foundRoute']['Method'];
             call_user_func_array([$objekat,$methodName],$foundRoute['arguments']);
         } else {
