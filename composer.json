@@ -1,0 +1,10 @@
+{
+  "require": {
+    "ezyang/htmlpurifier": "^4.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "blog\\": ""
+    }
+  }
+}
