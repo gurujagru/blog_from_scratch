@@ -3,7 +3,7 @@ $(document).ready(function(){
     //button Sakrij/Prikazi odgovore
 
     $(".odgovori").click(function () {
-        event.preventDefault();
+        //event.preventDefault();
         $(this).next('ul').toggle();
         if ($(this).text() == "Sakrij odgovore") {
             $(this).html("<b>Prikazi odgovore</b><span class=\"caret\"></span>");
@@ -19,7 +19,7 @@ $(document).ready(function(){
     //button Odgovori
 
     $(".odgovoriNaKomentar").click(function() {
-        event.preventDefault();
+        //event.preventDefault();
         $(this).hide();
         $(this).nextAll('.obrisiKomentar:first').hide();
         $(this).nextAll('.odgovori:first').hide();
@@ -38,7 +38,7 @@ $(document).ready(function(){
     });
 
     $("#noviKomentar").click(function () {
-        event.preventDefault();
+        //event.preventDefault();
         $(".skriveniDugmici").show();
     });
 

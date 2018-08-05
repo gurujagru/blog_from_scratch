@@ -18,10 +18,10 @@ use blog\core\Session;
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="http://glob-blog.org">GLOB-BLOG</a>
+            <a class="navbar-brand" href="http://glob-blog.test">GLOB-BLOG</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="http://glob-blog.org">Početna</a></li>
+            <li><a href="http://glob-blog.test">Početna</a></li>
             <?php if (Session::getSession('userId') == null): ?>
                 <li><a href="/login" id="login">Prijava</a></li>
                 <li><a href="/signup" id="sign-up">Registracija</a></li>

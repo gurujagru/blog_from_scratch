@@ -21,7 +21,7 @@ class Comment
 	public function getAllCommentsArticle($articleId, $commentId = ' IS NULL')
 	{
 		$db = Db::getConnection();
-		if ($commentId === ' IS NULL'){
+		if ($commentId === ' IS NULL') {
 			$stmt = $db->prepare("SELECT c.id, c.content, c.created_at, u.username FROM comment c JOIN article a  ON c.article_id = a.id JOIN user u ON u.id = c.user_id WHERE a.id = :articleId AND c.comment_id $commentId ORDER BY c.created_at DESC");
 		} else {
 			$stmt = $db->prepare("SELECT c.id, c.content, c.created_at, u.username FROM comment c JOIN article a  ON c.article_id = a.id JOIN user u ON u.id = c.user_id WHERE a.id = :articleId AND c.comment_id = :commentId ORDER BY c.created_at DESC");
